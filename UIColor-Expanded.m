@@ -496,7 +496,14 @@ static NSLock *colorNameCacheLock;
 
 // Returns a UIColor by scanning the string for a hex number and passing that to +[UIColor colorWithRGBHex:]
 // Skips any leading whitespace and ignores any trailing characters
+// Can now take an HTML short color code (eg: FF0)
 + (UIColor *)colorWithHexString:(NSString *)stringToConvert {
+	if (stringToConvert.length == 3) {
+        	NSString *shortRed = [cleanHex substringWithRange:NSMakeRange(0, 1)];
+        	NSString *shortGreen = [cleanHex substringWithRange:NSMakeRange(1, 1)];
+        	NSString *shortBlue = [cleanHex substringWithRange:NSMakeRange(2, 1)];
+        	stringToConvert = [NSString stringWithFormat:@"%@%@%@%@%@%@", shortRed, shortRed, shortGreen, shortGreen, shortBlue, shortBlue];
+        }
 	NSScanner *scanner = [NSScanner scannerWithString:stringToConvert];
 	unsigned hexNum;
 	if (![scanner scanHexInt:&hexNum]) return nil;
